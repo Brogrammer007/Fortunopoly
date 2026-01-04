@@ -1,0 +1,11 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# Live Server
+.vscode/
+.idea/
+*.log
+
+# Brain / Artifacts (optional, but usually good to keep local)
+# .gemini/

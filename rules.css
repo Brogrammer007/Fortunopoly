@@ -1,0 +1,70 @@
+/* Rules Button */
+.rules-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+    border-radius: 30px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    font-family: var(--font-main);
+}
+
+.rules-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.rules-btn .icon {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--accent-gold);
+}
+
+/* Rules Modal Content */
+.rules-content {
+    text-align: left;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.rules-content h3 {
+    color: var(--accent-gold);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 5px;
+}
+
+.rules-content p {
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.8);
+}
+
+.rules-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 1rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.rules-content li {
+    margin-bottom: 0.4rem;
+}
+
+/* Rules Modal Container */
+.rules-modal-content {
+    max-width: 600px;
+    max-height: 85vh;
+}

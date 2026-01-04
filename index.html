@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortunopoly - A Property Trading Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="rules.css">
+    <link rel="stylesheet" href="houses.css">
+    <link rel="stylesheet" href="trading.css">
+    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="mortgage.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Setup Screen -->
+    <div id="setup-screen" class="screen">
+        <!-- Rules Button on Setup Screen -->
+        <button id="rules-btn-setup" class="rules-btn">
+            <span class="icon">📜</span>
+            <span>Rules</span>
+        </button>
+
+        <div class="setup-container">
+            <h1 class="game-title">FORTUNOPOLY</h1>
+            <p class="game-subtitle">A Property Trading Adventure</p>
+
+            <div class="player-count-section">
+                <h2>How many players?</h2>
+                <div class="player-count-buttons">
+                    <button class="count-btn" data-count="2">2</button>
+                    <button class="count-btn" data-count="3">3</button>
+                    <button class="count-btn active" data-count="4">4</button>
+                    <button class="count-btn" data-count="5">5</button>
+                    <button class="count-btn" data-count="6">6</button>
+                </div>
+            </div>
+
+            <div class="player-names-section">
+                <h2>Enter Player Names</h2>
+                <div id="player-inputs"></div>
+            </div>
+
+            <div class="house-rules-section">
+                <h2>⚙️ House Rules</h2>
+                <div class="rules-grid">
+                    <label class="rule-toggle">
+                        <input type="checkbox" id="rule-parking-jackpot" class="toggle-switch">
+                        <div class="rule-info">
+                            <span class="rule-label">Free Parking Jackpot</span>
+                            <span class="rule-description">Tax money goes to the middle, winner takes all!</span>
+                        </div>
+                    </label>
+                    <label class="rule-toggle">
+                        <input type="checkbox" id="rule-double-go" class="toggle-switch">
+                        <div class="rule-info">
+                            <span class="rule-label">Double GO</span>
+                            <span class="rule-description">Get $400 for landing exactly on START</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Continue Game Button (Initially hidden) -->
+            <button id="continue-game-btn" class="primary-btn hidden"
+                style="margin-bottom: 1rem; background: linear-gradient(135deg, #2ecc71, #27ae60);">
+                <span>Continue Game</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 5V19M5 12L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M16 8L20 12L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            <button id="start-game-btn" class="primary-btn">
+                <span>Start Game</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 3L19 12L5 21V3Z" fill="currentColor" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen hidden">
+        <!-- Rules Button on Game Screen -->
+        <button id="rules-btn-game" class="rules-btn">
+            <span class="icon">📜</span>
+            <span>Rules</span>
+        </button>
+        <div class="game-layout">
+            <!-- Left Panel - Player Info -->
+            <aside class="left-panel">
+                <div class="current-player-section">
+                    <h2>Current Turn</h2>
+                    <div id="current-player-display" class="player-card"></div>
+                </div>
+
+                <div class="all-players-section">
+                    <h3>All Players</h3>
+                    <div id="players-list"></div>
+                </div>
+            </aside>
+
+            <!-- Center - Game Board -->
+            <main class="board-container">
+                <div id="game-board" class="game-board">
+                    <!-- Center Decks (Injected via JS or defined here) -->
+                    <div class="board-center-content">
+                        <div class="deck-area fortune-deck" id="fortune-deck">
+                            <div class="deck-card back">?</div>
+                            <div class="deck-label">FORTUNE</div>
+                        </div>
+                        <div class="center-logo-area">
+                            <div class="dice-container" id="dice-container">
+                                <div class="dice" id="dice1"></div>
+                                <div class="dice" id="dice2"></div>
+                            </div>
+                        </div>
+                        <div class="deck-area fate-deck" id="fate-deck">
+                            <div class="deck-card back">!</div>
+                            <div class="deck-label">FATE</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Panel - Actions & Properties -->
+            <aside class="right-panel">
+                <div class="actions-section">
+                    <h2>Actions</h2>
+                    <div id="action-buttons" class="action-buttons">
+                        <button id="roll-dice-btn" class="action-btn roll-btn">
+                            🎲 Roll Dice
+                        </button>
+                        <button id="buy-property-btn" class="action-btn buy-btn hidden">
+                            🏠 Buy Property
+                        </button>
+                        <button id="skip-buy-btn" class="action-btn skip-btn hidden">
+                            ⏭️ Skip Purchase
+                        </button>
+                        <button id="pay-jail-btn" class="action-btn jail-btn hidden">
+                            💰 Pay $50 to Leave Jail
+                        </button>
+                        <button id="end-turn-btn" class="action-btn end-btn hidden">
+                            ➡️ End Turn
+                        </button>
+                        <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 0.5rem 0;">
+                        <button id="trade-btn" class="action-btn trade-btn">
+                            🤝 Propose Trade
+                        </button>
+                        <button id="save-game-btn" class="action-btn save-btn"
+                            style="margin-top: 5px; background: #2c3e50;">
+                            💾 Save Process
+                        </button>
+                        <button id="main-menu-btn" class="action-btn menu-btn"
+                            style="margin-top: 5px; background: #34495e;">
+                            🏠 Main Menu
+                        </button>
+                    </div>
+                </div>
+
+                <div class="properties-section">
+                    <h3>Your Properties</h3>
+                    <div id="owned-properties" class="owned-properties"></div>
+                </div>
+
+                <div class="game-log-section">
+                    <h3>Game Log</h3>
+                    <div id="game-log" class="game-log"></div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div id="modal-content" class="modal-content"></div>
+    </div>
+
+    <!-- Pass Device Modal -->
+    <div id="pass-device-modal" class="modal-overlay hidden">
+        <div class="pass-device-content">
+            <h2>🔄 Pass the Device!</h2>
+            <p id="next-player-name"></p>
+            <button id="ready-btn" class="primary-btn">I'm Ready!</button>
+        </div>
+    </div>
+
+    <!-- Rules Modal -->
+    <div id="rules-modal" class="modal-overlay hidden">
+        <div class="modal-content rules-modal-content">
+            <div class="modal-title">📜 Game Rules</div>
+            <div class="rules-content">
+                <h3>🎯 Objective</h3>
+                <p>Be the last player remaining or have the highest net worth when the game ends. Bankrupt your
+                    opponents by collecting rent on your properties!</p>
+
+                <h3>🎲 Taking Turns</h3>
+                <ul>
+                    <li>Roll the dice and move your token clockwise around the board</li>
+                    <li><strong>Shortcuts:</strong> Click the dice to roll, Press <strong>SPACE</strong> to move!</li>
+                    <li>If you roll doubles, you get another turn (but 3 doubles = jail!)</li>
+                    <li>When you pass START, collect $200</li>
+                </ul>
+
+                <h3>🏠 Properties</h3>
+                <ul>
+                    <li>Land on an unowned property? Buy it or skip</li>
+                    <li>Land on someone else's property? Pay rent!</li>
+                    <li>Own all properties of one color = MONOPOLY (double rent!)</li>
+                </ul>
+
+                <h3>🏗️ Building Houses & Hotels</h3>
+                <ul>
+                    <li>When you have a MONOPOLY, click on your property to build</li>
+                    <li>Build up to 4 houses, then upgrade to a hotel</li>
+                    <li>More houses = MUCH higher rent</li>
+                </ul>
+
+                <h3>🔥 Sabotage</h3>
+                <ul>
+                    <li>Pay $150 to destroy one of your opponent's houses!</li>
+                    <li>Click on their property to see the sabotage option</li>
+                </ul>
+
+                <h3>🃏 Fortune & Fate Cards</h3>
+                <ul>
+                    <li>Land on Fortune or Fate to draw a card</li>
+                    <li>Cards can give money, take money, or move you around</li>
+                </ul>
+
+                <h3>🔒 Jail</h3>
+                <ul>
+                    <li>Go to Jail by landing on "Go To Jail" or drawing a jail card</li>
+                    <li>Escape by: rolling doubles, paying $50, or using a Get Out Free card</li>
+                    <li>After 3 turns you must pay $50 to leave</li>
+                </ul>
+
+                <h3>💸 Bankruptcy</h3>
+                <ul>
+                    <li>Can't pay rent or tax? You're bankrupt!</li>
+                    <li>Your properties transfer to whoever you owe</li>
+                    <li>Last player standing wins!</li>
+                </ul>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="hideRulesModal()">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trade Modal -->
+    <div id="trade-modal" class="modal-overlay hidden">
+        <div class="modal-content trade-modal-content">
+            <div class="modal-title">
+                🤝 Propose Trade
+                <button class="close-modal-btn" onclick="hideTradeModal()"
+                    style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+
+            <!-- Step 1: Select Partner -->
+            <div id="trade-step-1" class="trade-step">
+                <h3>Select Trading Partner</h3>
+                <div id="trade-partner-list" class="trade-partner-list"></div>
+            </div>
+
+            <!-- Step 2: Configure Trade -->
+            <div id="trade-step-2" class="trade-step hidden">
+                <div class="trade-columns">
+                    <!-- Your Offer -->
+                    <div class="trade-column offer-column">
+                        <h4>You Offer</h4>
+                        <div class="trade-properties" id="your-offer-properties"></div>
+                        <div class="trade-money-input">
+                            <label>💵 Money:</label>
+                            <input type="number" id="offer-money" min="0" value="0" step="50">
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="trade-arrow">⇄</div>
+
+                    <!-- You Request -->
+                    <div class="trade-column request-column">
+                        <h4>You Request</h4>
+                        <div class="trade-properties" id="your-request-properties"></div>
+                        <div class="trade-money-input">
+                            <label>💵 Money:</label>
+                            <input type="number" id="request-money" min="0" value="0" step="50">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="trade-error" class="trade-error"></div>
+            </div>
+
+            <!-- Step 3: Confirm (other player) -->
+            <div id="trade-step-3" class="trade-step hidden">
+                <div id="trade-summary"></div>
+            </div>
+
+            <div class="modal-buttons" id="trade-buttons">
+                <button class="modal-btn secondary" onclick="cancelTrade()">Cancel</button>
+                <button class="modal-btn primary" id="trade-next-btn" onclick="tradeNextStep()">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="screen hidden">
+        <div class="game-over-container">
+            <h1>🎉 Game Over!</h1>
+            <div id="winner-display"></div>
+            <div id="final-standings"></div>
+            <button id="play-again-btn" class="primary-btn">Play Again</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="game/tiles.js"></script>
+    <script src="game/cards.js"></script>
+    <script src="game/player.js"></script>
+    <script src="game/saveSystem.js"></script>
+    <script src="game/botAI.js"></script>
+    <script src="game/trading.js"></script>
+    <script src="game/board.js"></script>
+    <script src="game/gameState.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

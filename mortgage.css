@@ -1,0 +1,96 @@
+/* MORTGAGE.CSS - Styles for Mortgage System */
+
+/* Mortgage status on tiles */
+.tile.mortgaged::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6) repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 0, 0, 0.1) 10px,
+            rgba(255, 0, 0, 0.1) 20px);
+    z-index: 4;
+    pointer-events: none;
+}
+
+.tile.mortgaged .tile-name {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+.tile.mortgaged .tile-price {
+    display: none;
+}
+
+/* Mortgage badge overlay */
+.mortgaged-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    border: 2px solid #e74c3c;
+    color: #e74c3c;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2px 5px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 5;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Mortgage buttons in modal */
+.mortgage-actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.btn-mortgage {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-mortgage:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.btn-unmortgage {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-unmortgage:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+}
+
+.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
