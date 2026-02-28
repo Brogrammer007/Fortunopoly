@@ -98,7 +98,6 @@ Works in all modern browsers:
 ## 🎯 Features
 
 - ✅ 2-6 player local multiplayer
-- ✅ 40 unique board tiles
 - ✅ 8 property color groups
 - ✅ 4 railroad stations
 - ✅ 2 utility properties
